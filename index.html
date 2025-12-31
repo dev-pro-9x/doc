@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clean Master — Clean iPhone Storage & Trash Emails</title>
+  <meta name="description" content="Clean Master helps you delete duplicate media, clear trash emails, and free up iPhone storage in minutes." />
+
+  <style>
+    :root{
+      --bg1:#ffe3ef;
+      --bg2:#fff;
+      --ink:#1f1020;
+      --muted:#5b4d5f;
+      --card:#ffffffcc;
+      --glass:#ffffff1f;
+      --stroke:#ffffff2e;
+      --shadow: 0 24px 80px rgba(18, 6, 24, .18);
+      --shadow2: 0 16px 60px rgba(18, 6, 24, .14);
+      --pink:#ff3f8e;
+      --pink2:#ff8aa6;
+      --purple:#2a1037;
+      --purple2:#12061a;
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display","SF Pro Text", Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1200px 700px at 50% 0%, #ffd4e5 0%, rgba(255,212,229,0) 70%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    a{ color: inherit; text-decoration:none; }
+    .wrap{ max-width: 1120px; margin:0 auto; padding: 0 20px; }
+
+    /* NAV */
+    .nav{
+      position: sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(255, 227, 239, .55);
+      border-bottom: 1px solid rgba(255,255,255,.45);
+    }
+    .nav .row{
+      display:flex; align-items:center; justify-content:space-between;
+      height:72px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.6px;
+    }
+    .brand-badge{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  background: url("https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/appIcon.png?raw=true")
+              center / cover no-repeat;
+  box-shadow:
+    0 14px 40px rgba(255,63,142,.35),
+    inset 0 0 0 1px rgba(255,255,255,.35);
+    }
+    .navlinks{
+      display:flex; align-items:center; gap:18px;
+      color: rgba(31,16,32,.78);
+      font-weight:600;
+      font-size:14px;
+    }
+    .navlinks a{ opacity:.9; }
+    .navlinks a:hover{ opacity:1; text-decoration: underline; text-underline-offset: 4px; }
+
+    .cta{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--pink), var(--pink2));
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 18px 50px rgba(255,63,142,.28);
+      border: 1px solid rgba(255,255,255,.35);
+      transform: translateZ(0);
+      transition: transform .18s ease, filter .18s ease;
+      white-space: nowrap;
+    }
+    .cta:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .cta:active{ transform: translateY(0px) scale(.99); }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      padding: 64px 0 36px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 34px;
+      align-items:center;
+    }
+    @media (max-width: 920px){
+      .hero-grid{ grid-template-columns: 1fr; gap: 22px; }
+    }
+
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: 0 18px 50px rgba(18, 6, 24, .08);
+      color: rgba(31,16,32,.85);
+      font-weight: 750;
+      letter-spacing:.25px;
+      font-size: 14px;
+    }
+    .kicker .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      box-shadow: 0 10px 30px rgba(255,63,142,.28);
+    }
+
+    h1{
+      margin: 16px 0 10px;
+      font-size: clamp(34px, 4.2vw, 56px);
+      line-height: 1.03;
+      letter-spacing: -0.9px;
+    }
+    .grad{
+      background: linear-gradient(90deg, var(--pink), #ff5fb0, #ff8aa6);
+      -webkit-background-clip: text;
+      background-clip:text;
+      color: transparent;
+    }
+    .sub{
+      margin: 0 0 18px;
+      font-size: 18px;
+      line-height: 1.55;
+      color: rgba(31,16,32,.72);
+      max-width: 52ch;
+    }
+
+    .hero-actions{
+      display:flex; gap:12px; flex-wrap:wrap;
+      align-items:center;
+      margin-top: 14px;
+    }
+    .ghost{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.56);
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 18px 50px rgba(18, 6, 24, .08);
+      font-weight: 800;
+      color: rgba(31,16,32,.85);
+      transition: transform .18s ease;
+    }
+    .ghost:hover{ transform: translateY(-1px); }
+
+    .proof{
+      display:flex; gap:14px; flex-wrap:wrap;
+      margin-top: 18px;
+      color: rgba(31,16,32,.68);
+      font-weight: 650;
+      font-size: 14px;
+    }
+    .pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(255,255,255,.6);
+    }
+
+    /* PHONE STAGE */
+    .stage{
+      position:relative;
+      min-height: 520px;
+      border-radius: 28px;
+      background: radial-gradient(700px 420px at 60% 35%, rgba(255,99,174,.35), rgba(0,0,0,0) 60%),
+                  radial-gradient(520px 420px at 35% 70%, rgba(142,89,255,.20), rgba(0,0,0,0) 60%),
+                  linear-gradient(180deg, rgba(18,6,24,.92), rgba(28,10,38,.92));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .spark{
+      position:absolute; inset:-20%;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,.22), transparent 26%),
+        radial-gradient(circle at 70% 65%, rgba(255,255,255,.18), transparent 28%),
+        radial-gradient(circle at 55% 30%, rgba(255,63,142,.20), transparent 25%),
+        radial-gradient(circle at 40% 80%, rgba(255,140,166,.18), transparent 28%);
+      filter: blur(2px);
+      opacity:.9;
+      pointer-events:none;
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+    @keyframes drift{
+      from{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+      to  { transform: translate3d( 2%,  1%, 0) scale(1.03); }
+    }
+
+    .phones{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      perspective: 1100px;
+    }
+    .phone{
+      position:absolute;
+      width: min(340px, 78%);
+      aspect-ratio: 9 / 19.5;
+      border-radius: 34px;
+      overflow:hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.22);
+      transform-style: preserve-3d;
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(8px);
+      will-change: transform;
+    }
+    .phone img{
+      width:100%; height:100%; object-fit: cover;
+      transform: translateZ(0);
+    }
+
+    .phone.main{
+      z-index:3;
+      transform: translate3d(14px, 6px, 30px) rotate(-6deg);
+      animation: float1 4.8s ease-in-out infinite;
+    }
+    .phone.back{
+      z-index:2;
+      width: min(280px, 64%);
+      transform: translate3d(-120px, 40px, 0) rotate(10deg);
+      opacity:.92;
+      animation: float2 5.5s ease-in-out infinite;
+    }
+    @media (max-width: 920px){
+      .stage{ min-height: 520px; }
+      .phone.back{ transform: translate3d(-86px, 64px, 0) rotate(12deg); }
+      .phone.main{ transform: translate3d(28px, 8px, 30px) rotate(-7deg); }
+    }
+    @keyframes float1{
+      0%,100%{ transform: translate3d(14px, 6px, 30px) rotate(-6deg); }
+      50%    { transform: translate3d(14px, -4px, 30px) rotate(-6deg); }
+    }
+    @keyframes float2{
+      0%,100%{ transform: translate3d(-120px, 40px, 0) rotate(10deg); }
+      50%    { transform: translate3d(-120px, 30px, 0) rotate(10deg); }
+    }
+
+    .badge{
+      position:absolute; top:18px; left:18px;
+      display:flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.90);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: .25px;
+      backdrop-filter: blur(10px);
+    }
+    .badge .mini{
+      width: 18px; height: 18px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      box-shadow: 0 12px 30px rgba(255,63,142,.30);
+      display:grid; place-items:center;
+      color:white; font-size:12px;
+    }
+
+    .stage-bottom{
+      position:absolute; left:18px; right:18px; bottom:16px;
+      display:flex; flex-wrap:wrap; gap:10px;
+      justify-content:space-between; align-items:center;
+      color: rgba(255,255,255,.88);
+      z-index: 10;
+    }
+    .stage-bottom .mini-proof{
+      display:flex; gap:10px; flex-wrap:wrap;
+      font-weight: 700; font-size: 13px;
+      color: rgba(255,255,255,.82);
+    }
+    .stage-bottom .mini-proof span{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+    }
+
+    /* SECTIONS */
+    section{
+      padding: 56px 0;
+    }
+    .section-title{
+      font-size: 34px;
+      letter-spacing:-.6px;
+      margin: 0 0 10px;
+    }
+    .section-sub{
+      margin: 0 0 22px;
+      color: rgba(31,16,32,.70);
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 72ch;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 920px){
+      .grid3{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .card .inner{ padding: 18px 18px 16px; }
+    .card h3{
+      margin: 0 0 6px;
+      font-size: 18px;
+      letter-spacing:-.2px;
+    }
+    .card p{
+      margin:0;
+      color: rgba(31,16,32,.70);
+      line-height:1.6;
+      font-size: 14.5px;
+    }
+
+    .shot{
+      position:relative;
+      aspect-ratio: 1;
+      background: linear-gradient(180deg, rgba(18,6,24,.9), rgba(18,6,24,.7));
+      overflow:hidden;
+    }
+    .shot img{
+      width:100%; height:100%; object-fit: cover;
+      transform: scale(1);
+      filter: saturate(1.05);
+    }
+
+    /* Carousel */
+    .carousel{
+      position:relative;
+      border-radius: 26px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: var(--shadow2);
+      background: rgba(255,255,255,.45);
+    }
+    .track{
+      display:flex;
+      transition: transform .55s cubic-bezier(.2,.9,.2,1);
+      will-change: transform;
+    }
+    .slide{
+      min-width: 100%;
+      padding: 14px;
+    }
+    .slide .frame{
+      border-radius: 22px;
+      overflow:hidden;
+      background: rgba(18,6,24,.92);
+      box-shadow: 0 18px 70px rgba(18,6,24,.18);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .slide img{
+      width:100%;
+      display:block;
+      height:auto;
+    }
+    .dots{
+      position:absolute; left:0; right:0; bottom:14px;
+      display:flex; justify-content:center; gap:8px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius: 99px;
+      background: rgba(31,16,32,.22);
+      border: 1px solid rgba(255,255,255,.65);
+      backdrop-filter: blur(10px);
+      cursor:pointer;
+      transition: transform .18s ease, background .18s ease;
+    }
+    .dot.active{
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      transform: scale(1.15);
+    }
+
+    /* Premium */
+    .premium{
+      border-radius: 28px;
+      padding: 26px;
+      background: radial-gradient(700px 420px at 25% 20%, rgba(255,63,142,.22), transparent 60%),
+                  radial-gradient(700px 420px at 75% 60%, rgba(255,140,166,.18), transparent 60%),
+                  linear-gradient(180deg, rgba(18,6,24,.94), rgba(28,10,38,.94));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: var(--shadow);
+      color: rgba(255,255,255,.92);
+      overflow:hidden;
+      position:relative;
+    }
+    .premium h2{ margin:0 0 8px; font-size: 30px; letter-spacing:-.4px; }
+    .premium p{ margin:0 0 16px; color: rgba(255,255,255,.78); line-height:1.65; }
+    .premium ul{
+      margin: 0 0 18px; padding-left: 18px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.8;
+      font-weight: 650;
+    }
+
+    /* About / Footer */
+    .about{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+    }
+    @media (max-width: 920px){
+      .about{ grid-template-columns: 1fr; }
+    }
+    .footer{
+      padding: 40px 0 54px;
+      color: rgba(31,16,32,.68);
+      border-top: 1px solid rgba(255,255,255,.7);
+      background: linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.55));
+    }
+
+    /* Scroll reveal */
+    .reveal{
+      opacity:0; transform: translateY(14px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.show{
+      opacity:1; transform: translateY(0);
+    }
+
+    /* small helpers */
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    @media (max-width: 920px){
+      .row2{ grid-template-columns: 1fr; }
+    }
+    .small{
+      font-size: 13.5px;
+      color: rgba(31,16,32,.66);
+      line-height:1.55;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="wrap">
+      <div class="row">
+        <div class="brand">
+          <div class="brand-badge" aria-hidden="true"></div>
+          <div>
+            <div style="font-size:14px; opacity:.9;">CLEAN MASTER</div>
+            <div style="font-size:12px; opacity:.65; font-weight:700;">by HeroLabs</div>
+          </div>
+        </div>
+
+        <div class="navlinks">
+          <a href="#features">Features</a>
+          <a href="#screens">Screens</a>
+          <a href="#premium">Premium</a>
+          <a href="#about">HeroLabs</a>
+          <a class="cta" href="https://apps.apple.com/us/app/id6757098162" target="_blank" rel="noopener">
+            Download <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="reveal">
+          <div class="kicker">
+            <span class="dot" aria-hidden="true"></span>
+            Clean storage • Clear trash emails • Compare text
+          </div>
+
+          <h1>
+            Clean your iPhone <span class="grad">in minutes</span>
+          </h1>
+
+          <p class="sub">
+            Delete duplicate photos & videos, clear spam/promotions, and free up storage effortlessly —
+            with a premium, privacy-first experience.
+          </p>
+
+          <div class="hero-actions">
+            <a class="cta" href="https://apps.apple.com/us/app/id6757098162" target="_blank" rel="noopener">
+              Download on App Store <span aria-hidden="true">→</span>
+            </a>
+            <a class="ghost" href="#screens">See Screens <span aria-hidden="true">↘</span></a>
+          </div>
+
+          <div class="proof">
+            <span class="pill">10M+ users</span>
+            <span class="pill">5★ rating</span>
+            <span class="pill">Fast scanning</span>
+            <span class="pill">On-device privacy</span>
+          </div>
+        </div>
+
+        <div class="stage reveal" id="tiltStage">
+          <div class="spark" aria-hidden="true"></div>
+
+          <div class="badge">
+            <span class="mini">✦</span>
+            PRO-ready UI • Clean Master
+          </div>
+
+          <div class="phones" aria-hidden="true">
+            <div class="phone back" id="phoneBack">
+              <img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_6.jpg?raw=true" alt="Clean Master screen" />
+            </div>
+            <div class="phone main" id="phoneMain">
+              <img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_2.jpg?raw=true" alt="Clean Master Premium screen" />
+            </div>
+          </div>
+
+          <div class="stage-bottom">
+            <div class="mini-proof">
+              <span>Duplicate cleanup</span>
+              <span>Trash email cleaner</span>
+              <span>Text compare</span>
+            </div>
+            <div class="mini-proof">
+              <span>Safe • Private</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="reveal">
+        <h2 class="section-title">Everything you need to clean faster</h2>
+        <p class="section-sub">
+          Clean Master helps you reclaim storage and keep your inbox tidy — with an interface designed for speed and clarity.
+        </p>
+      </div>
+
+      <div class="grid3">
+        <div class="card reveal">
+          <div class="shot"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_3.png?raw=true" alt="Clean up iPhone storage" /></div>
+          <div class="inner">
+            <h3>🧹 Clean iPhone Storage</h3>
+            <p>Find duplicates, similar photos, and large videos — free up GBs in one tap.</p>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="shot"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_5.jpg?raw=true" alt="Clear trash emails" /></div>
+          <div class="inner">
+            <h3>📧 Clear Trash Emails</h3>
+            <p>Organize by categories like spam & promotions — clean your inbox effortlessly.</p>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="shot"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_6.jpg?raw=true" alt="Compare similar text" /></div>
+          <div class="inner">
+            <h3>📝 Compare Similar Text</h3>
+            <p>Paste or scan text to detect similarity — perfect for notes and documents.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENS / CAROUSEL -->
+  <section id="screens">
+    <div class="wrap">
+      <div class="row2">
+        <div class="reveal">
+          <h2 class="section-title">Beautiful screens. Smooth flow.</h2>
+          <p class="section-sub">
+            A premium dark UI with pink accents, built to feel fast — from scan to clean.
+          </p>
+          <p class="small">
+            Tip: replace the App Store link with your real URL when you publish.
+          </p>
+        </div>
+
+        <div class="carousel reveal" aria-label="Screens carousel">
+          <div class="track" id="track">
+             <div class="slide"><div class="frame"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_3.png?raw=true" alt="Storage cleaning screen" /></div></div>
+            <div class="slide"><div class="frame"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_4.jpg?raw=true" alt="Delete duplicate media screen" /></div></div>
+            <div class="slide"><div class="frame"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_5.jpg?raw=true" alt="Trash emails screen" /></div></div>
+            <div class="slide"><div class="frame"><img src="https://github.com/dev-pro-9x/dev-pro-9x.github.io/blob/main/assets/SCS_6.jpg?raw=true" alt="Compare text screen" /></div></div>
+          </div>
+          <div class="dots" id="dots" aria-hidden="false"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREMIUM -->
+  <section id="premium">
+    <div class="wrap">
+      <div class="premium reveal">
+        <h2><span class="grad" style="-webkit-text-fill-color:transparent;">Clean Master Premium</span></h2>
+        <p>Unlock the best experience for power cleaning and faster scanning.</p>
+        <ul>
+          <li>Unlimited cleaning & advanced duplicate detection</li>
+          <li>Faster scans + smarter best-result selection</li>
+          <li>Priority improvements & premium features</li>
+        </ul>
+        <a class="cta" href="https://apps.apple.com/us/app/id6757098162" target="_blank" rel="noopener">
+          Try Premium Now <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="about">
+        <div class="card reveal">
+          <div class="inner">
+            <h3>About HeroLabs</h3>
+            <p>
+              <strong>HeroLabs</strong> is a technology company specializing in <strong>mobile software development</strong>
+              for <strong>iOS</strong> and <strong>Android</strong>. We build high-quality, user-friendly apps that help
+              users clean, optimize, and simplify everyday digital tasks — with a strong focus on performance, privacy,
+              and user experience.
+            </p>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="inner">
+            <h3>Support</h3>
+            <p>
+              Need help or have questions?<br />
+              Contact us at:
+              <a href="mailto:tvtechhelper@gmail.com" style="font-weight:900; text-decoration: underline; text-underline-offset: 4px;">
+                tvtechhelper@gmail.com
+              </a>
+            </p>
+            <div style="margin-top:14px;">
+              <a class="ghost" href="mailto:tvtechhelper@gmail.com">Email Support →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+  <div class="wrap">
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; align-items:flex-start;">
+      
+      <!-- LEFT -->
+      <div>
+        <div style="font-weight:900;">© 2025 HeroLabs</div>
+        <div class="small">
+          Mobile Software Development Company • iOS & Android Applications
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="small" style="display:flex; flex-direction:column; gap:8px;">
+        <div>
+          Support:
+          <a href="mailto:tvtechhelper@gmail.com"
+             style="font-weight:900; text-decoration: underline; text-underline-offset: 4px;">
+            tvtechhelper@gmail.com
+          </a>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="https://herolab.store/privacy-policy.html"
+             target="_blank"
+             rel="noopener"
+             style="font-weight:800; text-decoration: underline; text-underline-offset: 4px;">
+            Privacy Policy
+          </a>
+
+          <a href="https://herolab.store/terms.html"
+             target="_blank"
+             rel="noopener"
+             style="font-weight:800; text-decoration: underline; text-underline-offset: 4px;">
+            Terms of Service
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <script>
+    // ===== Scroll reveal =====
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add('show');
+      }
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ===== Carousel (auto + dots) =====
+    const track = document.getElementById('track');
+    const slides = Array.from(track.children);
+    const dotsWrap = document.getElementById('dots');
+    let idx = 0;
+    let timer = null;
+
+    function renderDots() {
+      dotsWrap.innerHTML = '';
+      slides.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === idx ? ' active' : '');
+        d.addEventListener('click', () => {
+          idx = i;
+          updateCarousel(true);
+        });
+        dotsWrap.appendChild(d);
+      });
+    }
+
+    function updateCarousel(resetTimer=false) {
+      track.style.transform = `translateX(${-idx * 100}%)`;
+      Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle('active', i === idx));
+      if (resetTimer) restartTimer();
+    }
+
+    function restartTimer() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        idx = (idx + 1) % slides.length;
+        updateCarousel(false);
+      }, 3600);
+    }
+
+    renderDots();
+    updateCarousel(false);
+    restartTimer();
+
+    // Pause on hover (desktop)
+    const carousel = document.querySelector('.carousel');
+    carousel.addEventListener('mouseenter', () => timer && clearInterval(timer));
+    carousel.addEventListener('mouseleave', () => restartTimer());
+
+    // ===== Tilt effect for hero phones =====
+    const stage = document.getElementById('tiltStage');
+    const phoneMain = document.getElementById('phoneMain');
+    const phoneBack = document.getElementById('phoneBack');
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    stage.addEventListener('mousemove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;   // 0..1
+      const y = (e.clientY - r.top) / r.height;   // 0..1
+      const rx = clamp((0.5 - y) * 10, -10, 10);
+      const ry = clamp((x - 0.5) * 12, -12, 12);
+
+      phoneMain.style.transform = `translate3d(14px, 6px, 30px) rotate(-6deg) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      phoneBack.style.transform = `translate3d(-120px, 40px, 0) rotate(10deg) rotateX(${rx * 0.6}deg) rotateY(${ry * 0.6}deg)`;
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      phoneMain.style.transform = '';
+      phoneBack.style.transform = '';
+    });
+  </script>
+</body>
+</html>
